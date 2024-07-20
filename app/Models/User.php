@@ -44,4 +44,14 @@ class User extends Authenticatable
             'password'          => 'hashed',
         ];
     }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'followings', 'user_id', 'following_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followings', 'following_id', 'user_id');
+    }
 }
