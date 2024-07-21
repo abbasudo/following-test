@@ -33,6 +33,13 @@ class User extends Authenticatable
         'password',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'username';
+    }
 
     /**
      * Follow a user.
@@ -52,6 +59,16 @@ class User extends Authenticatable
     public function unfollow(User $user): void
     {
         $this->following()->detach($user->id);
+    }
+
+    /**
+     * Get common followers.
+     */
+    public function commonFollowers(User $user)
+    {
+        return $this->followers()->whereHas('follows', function ($query) use ($user) {
+            $query->where('following_id', $user->id);
+        })->get();
     }
 
     /**
@@ -75,5 +92,10 @@ class User extends Authenticatable
     public function followers()
     {
         return $this->belongsToMany(User::class, 'followings', 'following_id', 'user_id')->withTimestamps();
+    }
+
+    public function follows()
+    {
+        return $this->hasMany(Following::class);
     }
 }
