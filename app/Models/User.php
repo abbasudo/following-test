@@ -39,7 +39,11 @@ class User extends Authenticatable
      */
     public function follow(User $user): void
     {
-        $this->following()->attach($user->id);
+        if ($this->id === $user->id) {
+            return;
+        }
+
+        $this->following()->syncWithoutDetaching($user->id);
     }
 
     /**
@@ -65,11 +69,11 @@ class User extends Authenticatable
 
     public function following()
     {
-        return $this->belongsToMany(User::class, 'followings', 'user_id', 'following_id');
+        return $this->belongsToMany(User::class, 'followings', 'user_id', 'following_id')->withTimestamps();
     }
 
     public function followers()
     {
-        return $this->belongsToMany(User::class, 'followings', 'following_id', 'user_id');
+        return $this->belongsToMany(User::class, 'followings', 'following_id', 'user_id')->withTimestamps();
     }
 }

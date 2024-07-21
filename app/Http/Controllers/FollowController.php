@@ -13,6 +13,8 @@ class FollowController extends Controller
      */
     public function store(User $user)
     {
+        abort_if(Auth::user()->id === $user->id, 422, 'Cannot follow yourself');
+
         Auth::user()->follow($user);
 
         return new UserResource($user);
