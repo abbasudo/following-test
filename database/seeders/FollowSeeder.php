@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Following;
+use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Random\RandomException;
 
-class FollowingSeeder extends Seeder
+class FollowSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,7 +18,7 @@ class FollowingSeeder extends Seeder
     {
         User::all()->each(function (User $user) {
             // Create a random number of following relationships for each user
-            Following::factory(random_int(1, 10))
+            Follow::factory(random_int(1, 10))
                 ->state(
                     new Sequence(
                         fn(Sequence $sequence) => ['following_id' => User::all()->random()],
